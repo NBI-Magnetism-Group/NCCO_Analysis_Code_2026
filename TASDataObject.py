@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from KGS import *
 
 class Dataset:
     def __init__(self, qh, qk, cnt, cnt_err, mn, en, tt, **kwargs):
@@ -23,6 +24,8 @@ class Dataset:
         self.amp_err = None
         self.sig_area = None
         self.sig_area_err = None
+        self.best_fit_obj = None
+        self.fit_type = None
 
     def __repr__(self):
         return (f"EN={self.EN}, TT={self.TT}, "
@@ -74,6 +77,28 @@ class Dataset:
 
         # Calculate the error in the signal amplitude
         self.amp_err = np.sqrt(self.Chi_err[1]**2 + ((self.Chi_err[0]**2 + self.Chi_err[2]**2) / 4))
+
+    def FindBestFit(self, model1, model2, initial_guess1, initial_guess2, fixed_params1=None, limits1=None, fixed_params2=None, limits2=None):
+        
+        m_gauss = fit(self.QK, self.Chi, self.Chi_err, model1, initial_guess1, fixed_params=fixed_params1, limits=limits1)
+
+        m_const = fit(self.QK, self.Chi, self.Chi_err, model2, initial_guess2, fixed_params=fixed_params2, limits=limits2)
+
+        red_chi2_gauss = m_gauss.fval/(len(self.QK)-4)
+        #print('gauss chi = ', red_chi2_gauss)
+        red_chi2_const = m_const.fval/(len(self.QK)-1)
+        #print('const chi = ', red_chi2_const)
+
+        # Compare reduced chi-squared and return the better fit
+        if red_chi2_gauss < red_chi2_const:
+             self.fit_type = "gauss"
+             self.best_fit_obj = m_gauss
+        else:
+            self.fit_type = "const"
+            self.best_fit_obj = m_const
+
+
+############################ Functions operating with the objects ##################
 
 def extract_data_from_file(filepath):
     with open(filepath, 'r') as file:
@@ -198,3 +223,60 @@ def combine_datasets(dataset1, dataset2, qh_tolerance=1e-3, qk_tolerance=1e-3):
 
     return combined_dataset
 
+
+
+def plot_fits(data_objects):
+    """
+    Plots a grid of subplots showing the data points with error bars and the fitted curve.
+    
+    Parameters:
+        data_objects (list): List of data objects, where each object contains x, y, yerr data and a best_fit_obj attribute.
+    """
+    num_plots = len(data_objects)
+    
+    # Determine the layout of subplots based on the number of plots
+    cols = int(np.ceil(np.sqrt(num_plots)))
+    rows = int(np.ceil(num_plots / cols))
+    
+    fig, axes = plt.subplots(rows, cols, figsize=(cols * 5, rows * 5))
+    axes = axes.flatten() if num_plots > 1 else [axes]  # Flatten in case of multiple axes
+    
+    for i, data_obj in enumerate(data_objects):
+        ax = axes[i]
+
+        # Extract data from each object
+        x = data_obj.QK
+        y = data_obj.Chi
+        yerr = data_obj.Chi_err
+
+        # Plot the data points with error bars
+        ax.errorbar(x, y, yerr=yerr, fmt='o')
+
+        # Generate x-values for plotting the fit
+        x_fit = np.linspace(min(x), max(x), 500)
+
+        # Plot the best fit based on the fit_type
+        if data_obj.fit_type == "gauss":
+            # Assuming best_fit_obj contains the parameters A, mu, sigma, and C for the Gaussian+constant fit
+            A, mu, sigma, C = data_obj.best_fit_obj.values
+            y_fit = (A / (sigma * np.sqrt(2 * np.pi))) * np.exp(-((x_fit - mu)**2) / (2 * sigma**2)) + C
+            ax.plot(x_fit, y_fit, label='Gaussian Fit', color='red')
+
+        elif data_obj.fit_type == "const":
+            # Assuming best_fit_obj contains just the constant C
+            C = data_obj.best_fit_obj.values
+            y_fit = np.full_like(x_fit, C)
+            ax.plot(x_fit, y_fit, label='Constant Fit', color='b')
+
+        # Add title and labels
+        ax.set_title(f"{data_obj.EN:.1f} meV, {data_obj.TT:.1f} K: {data_obj.fit_type.capitalize()} Fit")
+        ax.set_xlabel("qk")
+        ax.set_ylabel("chi")
+        ax.legend()
+
+    # Remove any unused subplots if there are extra grid spaces
+    for j in range(i+1, len(axes)):
+        fig.delaxes(axes[j])
+
+    plt.tight_layout()
+    plt.show()
