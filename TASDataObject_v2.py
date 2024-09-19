@@ -261,7 +261,7 @@ def plot_fits(data_objects):
         if data_obj.fit_type == "gauss":
             # Assuming best_fit_obj contains the parameters A, mu, sigma, and C for the Gaussian+constant fit
             A, mu, sigma, a, C = data_obj.best_fit_obj.values
-            y_fit = (A / (sigma * np.sqrt(2 * np.pi))) * np.exp(-((x_fit - mu)**2) / (2 * sigma**2)) + a*x_fit +C
+            y_fit = A * np.exp(-((x_fit - mu)**2) / (2 * sigma**2)) + a*x_fit +C
             ax.plot(x_fit, y_fit, label='Gaussian Fit', color='red')
 
         elif data_obj.fit_type == "const":
