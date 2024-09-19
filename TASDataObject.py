@@ -93,7 +93,7 @@ class Dataset:
         if red_chi2_gauss < red_chi2_const:
              self.fit_type = "gauss"
              self.best_fit_obj = m_gauss
-        else:
+        if (red_chi2_gauss > red_chi2_const) or (m_gauss.values['A'] < m_gauss.errors['A']):
             self.fit_type = "const"
             self.best_fit_obj = m_const
 
@@ -238,7 +238,8 @@ def plot_fits(data_objects):
     cols = int(np.ceil(np.sqrt(num_plots)))
     rows = int(np.ceil(num_plots / cols))
     
-    fig, axes = plt.subplots(rows, cols, figsize=(cols * 5, rows * 5))
+    # Set the figure size to better fit PowerPoint slide (16:9 aspect ratio)
+    fig, axes = plt.subplots(rows, cols, figsize=(cols * 4, rows * 3))  # Adjusted figsize for better slide fit
     axes = axes.flatten() if num_plots > 1 else [axes]  # Flatten in case of multiple axes
     
     for i, data_obj in enumerate(data_objects):
@@ -454,6 +455,69 @@ def PlotGaussArea(data_objects, x_attr='EN', title='Gauss Area'):
     elif x_attr=='TT':
         axs.set_xlabel(r'T [K]')
 
-    plt.show()
+    #plt.show()
 
-    #return As, A_errs
+    return As, A_errs
+
+
+
+def PlotGaussSigma(data_objects, x_attr='EN', title='Gauss Area'):
+    """
+    Function to plot the fitting parameters and their errors of each data object as a function of an attribute.
+    
+    Parameters:
+        data_objects (list): List of data objects containing fit information.
+        x_attr (str): The attribute to plot on the x-axis ('EN' or 'TT').
+    """
+    # Lists to store the fitting parameters and their errors
+    sigmas, sigma_errs = [], []
+
+    # X-axis values from the specified attribute
+    x_vals = [getattr(obj, x_attr) for obj in data_objects]
+
+    # Loop through each data object
+    for obj in data_objects:
+        # Extract the Minuit fit object and fit type
+        minuit = obj.best_fit_obj
+        fit_type = obj.fit_type  # Either 'gauss' or 'slope'
+
+        if fit_type == 'gauss':
+            # Get Gaussian fit parameters and errors from the Minuit object
+            sigma = minuit.values['sigma']
+            sigma_err = minuit.errors['sigma']
+
+            # Append the parameters and errors to their respective lists
+            sigmas.append(sigma)
+            sigma_errs.append(sigma_err)
+
+        elif fit_type == 'const':
+            # Set Gaussian parameters to 0 for linear fit
+            sigma, sigma_err = 0, 0
+
+            sigmas.append(sigma)
+            sigma_errs.append(sigma_err)
+            
+
+    # Now plot the parameters in subplots with error bars
+    fig, axs = plt.subplots(1, 1, figsize=(6, 4), sharex=True)
+    fig.subplots_adjust(hspace=0.3)
+
+    # Plot the Gaussian area with error bars
+    axs.errorbar(x_vals, sigmas, yerr=sigma_errs, fmt='o', linestyle='-', color='green', capsize=3)
+    axs.set_ylabel('Area (A)')
+    axs.set_title(title)
+    
+    if x_attr=='EN':
+        axs.set_xlabel(r'$\Delta E$ [meV]')
+    elif x_attr=='TT':
+        axs.set_xlabel(r'T [K]')
+
+    #plt.show()
+
+    return sigmas, sigma_errs
+
+
+def PointAmpToArea():
+
+    
+    return A_p3, A_p3_err
