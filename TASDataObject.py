@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from KGS import *
+from scipy.stats import chi2
 
 class Dataset:
     def __init__(self, qh, qk, cnt, cnt_err, mn, en, tt, **kwargs):
@@ -25,6 +26,9 @@ class Dataset:
         self.p3_area = None
         self.p3_area_err = None
         self.best_fit_obj = None
+        self.wilks = None
+        self.red_chi2_gauss = None
+        self.red_chi2_const = None
         self.g = None
     
 
@@ -85,16 +89,22 @@ class Dataset:
 
         m_const = fit(self.QK, self.Chi, self.Chi_err, model2, initial_guess2, fixed_params=fixed_params2, limits=limits2)
 
-        red_chi2_gauss = m_gauss.fval/(len(self.QK)-5)
+        self.red_chi2_gauss = m_gauss.fval/(len(self.QK)-5)
         #print('gauss chi = ', red_chi2_gauss)
-        red_chi2_const = m_const.fval/(len(self.QK)-2)
+        self.red_chi2_const = m_const.fval/(len(self.QK)-2)
         #print('const chi = ', red_chi2_const)
 
+        # Wilks' theorem calculations
+        delta_chi2 = m_const.fval -  m_gauss.fval
+        degrees_of_freedom = 5 - 2  # 5 parameters in the Gaussian model, 2 in the constant model
+        p_value = chi2.sf(delta_chi2, degrees_of_freedom)
+        self.wilks= p_value
+
         # Compare reduced chi-squared and return the better fit
-        if red_chi2_gauss < red_chi2_const:
+        if p_value<0.02:#red_chi2_gauss < red_chi2_const:
              self.fit_type = "gauss"
              self.best_fit_obj = m_gauss
-        if (red_chi2_gauss > red_chi2_const) or (m_gauss.values['A'] < m_gauss.errors['A']):
+        if p_value>0.02: #(red_chi2_gauss > red_chi2_const) or (m_gauss.values['A'] < m_gauss.errors['A']):
             self.fit_type = "const"
             self.best_fit_obj = m_const
 
@@ -262,19 +272,21 @@ def plot_fits(data_objects):
             # Assuming best_fit_obj contains the parameters A, mu, sigma, and C for the Gaussian+constant fit
             A, mu, sigma, a, C = data_obj.best_fit_obj.values
             y_fit = (A / (sigma * np.sqrt(2 * np.pi))) * np.exp(-((x_fit - mu)**2) / (2 * sigma**2)) + a*x_fit +C
-            ax.plot(x_fit, y_fit, label='Gaussian Fit', color='red')
+            red_chi = data_obj.best_fit_obj.fval/(len(data_obj.QK)-5)
+            ax.plot(x_fit, y_fit, label=f'p(Wilks) = {data_obj.wilks:.3f}\n RedChi(gauss) = {data_obj.red_chi2_gauss:.3f}\n RedChi(slope) = {data_obj.red_chi2_const:.3f}', color='red')
 
         elif data_obj.fit_type == "const":
             # Assuming best_fit_obj contains just the constant C
             a, C = data_obj.best_fit_obj.values
             y_fit = a*x_fit+C
-            ax.plot(x_fit, y_fit, label='Constant Fit', color='b')
+            red_chi = data_obj.best_fit_obj.fval/(len(data_obj.QK)-2)
+            ax.plot(x_fit, y_fit, label=f'p(Wilks) = {data_obj.wilks:.3f}\n RedChi(gauss) = {data_obj.red_chi2_gauss:.3f}\n RedChi(slope) = {data_obj.red_chi2_const:.3f}', color='b')
 
         # Add title and labels
         ax.set_title(f"{data_obj.EN:.1f} meV, {data_obj.TT:.1f} K: {data_obj.fit_type.capitalize()} Fit")
-        ax.set_xlabel("qk")
-        ax.set_ylabel("chi")
-        ax.legend()
+        ax.set_xlabel("$q_k$")
+        ax.set_ylabel('$\chi\'\'(Q, \omega)$')
+        ax.legend(fontsize=8)
 
     # Remove any unused subplots if there are extra grid spaces
     for j in range(i+1, len(axes)):
@@ -284,7 +296,7 @@ def plot_fits(data_objects):
     plt.show()
 
 
-def plot_fit_parameters(data_objects, x_attr='EN'):
+def plot_fit_parameters(data_objects, x_attr='EN', title=' '):
     """
     Function to plot the fitting parameters and their errors of each data object as a function of an attribute.
     
@@ -370,7 +382,7 @@ def plot_fit_parameters(data_objects, x_attr='EN'):
             a_errs.append(a_err)
 
     # Now plot the parameters in subplots with error bars
-    fig, axs = plt.subplots(5, 1, figsize=(10, 15), sharex=True)
+    fig, axs = plt.subplots(1, 5, figsize=(25, 5), sharex=True)
     fig.subplots_adjust(hspace=0.3)
 
     # Plot the Gaussian area with error bars
@@ -399,6 +411,7 @@ def plot_fit_parameters(data_objects, x_attr='EN'):
     axs[4].set_title('Slope (Linear Background)')
     axs[4].set_xlabel(x_attr)
 
+    plt.suptitle(title)
     plt.show()
 
 # Example of how you would call the function:
@@ -530,7 +543,7 @@ def PointAmpToArea(data_objects, avg_all_sigma, avg_all_sigma_err):
         Amp_err = obj.amp_err
 
         A_p3 = Amp * np.sqrt(2 * np.pi) * avg_all_sigma 
-        A_p3_err = np.sqrt(2*np.pi*avg_all_sigma**2**Amp_err**2 + Amp**2*2*np.pi*avg_all_sigma_err**2)
+        A_p3_err = A_p3 * np.sqrt(2*np.pi*avg_all_sigma**2**Amp_err**2 + Amp**2*2*np.pi*avg_all_sigma_err**2)
         
         Areas_p3.append(A_p3)
         Area_errs_p3.append(A_p3_err)
