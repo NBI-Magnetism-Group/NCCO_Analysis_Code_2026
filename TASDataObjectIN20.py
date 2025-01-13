@@ -1,3 +1,8 @@
+# Author: Kristine M. L. Krighaar
+# Niels Bohr Institute, University of Copenhagen
+#
+# 
+
 import numpy as np
 import pandas as pd
 from KGS import *
@@ -62,7 +67,7 @@ class Dataset:
         self.Chi = 10**(3)*np.pi/2*(1-np.exp(-self.EN/(0.08617*self.TT)))*(13.77*self.I)/(self.fq**2*1*self.res_vol)
         self.Chi_err = 10**(3)*np.pi/2*(1-np.exp(-self.EN/(0.08617*self.TT)))*(13.77*self.I_err)/(self.fq**2*1*self.res_vol)
 
-    def p3_scan_amplitude_SQ(self):
+    def p3_scan_amplitude_chi(self):
         """
         Extracts the signal amplitude from a 3-point inelastic neutron scattering measurement.
 
@@ -76,19 +81,19 @@ class Dataset:
         """
 
         # Calculate the background as the average of the off-peak points (I(E1) and I(E3))
-        I_bg = (self.SQ[0] + self.SQ[2]) / 2
+        I_bg = (self.Chi[0] + self.Chi[2]) / 2
 
         # Extract the signal amplitude by subtracting the background from the central point (I(E2))
-        self.amp = self.SQ[1] - I_bg
+        self.amp = self.Chi[1] - I_bg
 
         # Calculate the error in the signal amplitude
-        self.amp_err = np.sqrt(self.SQ_err[1]**2 + ((self.SQ_err[0]**2 + self.SQ_err[2]**2) / 4))
+        self.amp_err = np.sqrt(self.Chi_err[1]**2 + ((self.Chi_err[0]**2 + self.Chi_err[2]**2) / 4))
 
     def FindBestFit(self, model1, model2, initial_guess1, initial_guess2, fixed_params1=None, limits1=None, fixed_params2=None, limits2=None):
         
-        m_gauss = fit(self.QK, self.SQ, self.SQ_err, model1, initial_guess1, fixed_params=fixed_params1, limits=limits1)
+        m_gauss = fit(self.QK, self.Chi, self.Chi_err, model1, initial_guess1, fixed_params=fixed_params1, limits=limits1)
 
-        m_const = fit(self.QK, self.SQ, self.SQ_err, model2, initial_guess2, fixed_params=fixed_params2, limits=limits2)
+        m_const = fit(self.QK, self.Chi, self.Chi_err, model2, initial_guess2, fixed_params=fixed_params2, limits=limits2)
 
         self.red_chi2_gauss = m_gauss.fval/(len(self.QK)-5)
         #print('gauss chi = ', red_chi2_gauss)
@@ -261,8 +266,8 @@ def plot_fits(data_objects, sample='sample_name'):
 
         # Extract data from each object
         x = data_obj.QK
-        y = data_obj.SQ
-        yerr = data_obj.SQ_err
+        y = data_obj.Chi
+        yerr = data_obj.Chi_err
 
         # Plot the data points with error bars
         ax.errorbar(x, y, yerr=yerr, fmt='o')
@@ -288,7 +293,7 @@ def plot_fits(data_objects, sample='sample_name'):
         # Add title and labels
         ax.set_title(f"{data_obj.EN:.1f} meV, {data_obj.TT:.1f} K: {data_obj.fit_type.capitalize()} Fit")
         ax.set_xlabel("$(h,1-h,0)$ [r.l.u.]")
-        ax.set_ylabel('$S(Q, \omega)$')
+        ax.set_ylabel('$\chi\'\'(Q, \omega)$')
         ax.legend(fontsize=8)
 
     # Remove any unused subplots if there are extra grid spaces
@@ -296,8 +301,7 @@ def plot_fits(data_objects, sample='sample_name'):
         fig.delaxes(axes[j])
 
     plt.tight_layout()
-    plt.savefig(f'Figures_eps/IN20/Raw_fits_{sample}.eps', format='eps',bbox_inches='tight')
-    plt.savefig(f'Figures_png/IN20/Raw_fits_{sample}.png', format='png',bbox_inches='tight')
+    plt.savefig(f'Raw_fits_{sample}.png', format='png',bbox_inches='tight')
     plt.show()
 
 
@@ -555,7 +559,7 @@ def PointAmpToArea(data_objects, avg_all_sigma, avg_all_sigma_err):
         Amp_err = obj.amp_err
 
         A_p3 = Amp * np.sqrt(2 * np.pi) * avg_all_sigma 
-        A_p3_err = np.sqrt(2 * np.pi * avg_all_sigma**2 * Amp_err**2 + Amp**2 * 2 * np.pi * avg_all_sigma_err**2)
+        A_p3_err = np.sqrt(2*np.pi*avg_all_sigma**2*Amp_err**2 + Amp**2*2*np.pi*avg_all_sigma_err**2)
         
         Areas_p3.append(A_p3)
         Area_errs_p3.append(A_p3_err)
