@@ -1,7 +1,6 @@
 # Author: Kristine M. L. Krighaar
 # Niels Bohr Institute, University of Copenhagen
 #
-# 
 
 import numpy as np
 import pandas as pd
@@ -264,8 +263,8 @@ def plot_fits(data_objects, sample='sample_name'):
         fig.delaxes(axes[j])
 
     plt.tight_layout()
-    plt.savefig(f'Figures_eps/IN20/Raw_fits_{sample}.eps', format='eps',bbox_inches='tight')
-    plt.savefig(f'Figures_png/IN20/Raw_fits_{sample}.png', format='png',bbox_inches='tight')
+    plt.savefig(f'Figures_eps/TAIPAN/Raw_fits_{sample}.eps', format='eps',bbox_inches='tight')
+    plt.savefig(f'Figures_png/TAIPAN/Raw_fits_{sample}.png', format='png',bbox_inches='tight')
     plt.show()
 
 
