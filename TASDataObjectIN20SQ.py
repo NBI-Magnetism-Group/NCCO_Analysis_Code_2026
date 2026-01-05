@@ -294,6 +294,7 @@ def plot_fits(data_objects, sample='sample_name'):
         ax.set_title(f"{data_obj.EN:.1f} meV, {data_obj.TT:.1f} K: {data_obj.fit_type.capitalize()} Fit")
         ax.set_xlabel("$(h,1-h,0)$ [r.l.u.]")
         ax.set_ylabel('$S(Q, \omega)$')
+        ax.grid(linestyle='dotted')
         ax.legend(fontsize=8)
 
     # Remove any unused subplots if there are extra grid spaces

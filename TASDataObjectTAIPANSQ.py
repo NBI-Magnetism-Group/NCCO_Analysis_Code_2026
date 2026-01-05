@@ -206,7 +206,7 @@ def combine_datasets(dataset1, dataset2, qh_tolerance=1e-3, qk_tolerance=1e-3):
 
 
 
-def plot_fits(data_objects, sample='sample_name'):
+def plot_fits(data_objects, sample='sample_name', temperature = 'Nan'):
     """
     Plots a grid of subplots showing the data points with error bars and the fitted curve.
     
@@ -256,6 +256,7 @@ def plot_fits(data_objects, sample='sample_name'):
         ax.set_title(f"{data_obj.EN:.1f} meV, {data_obj.TT:.1f} K: {data_obj.fit_type.capitalize()} Fit")
         ax.set_xlabel("$(h,1-h,0)$ [r.l.u.]")
         ax.set_ylabel('$S(Q, \omega)$')
+        #ax.grid(linestyle='dotted')
         ax.legend(fontsize=8)
 
     # Remove any unused subplots if there are extra grid spaces
@@ -263,8 +264,8 @@ def plot_fits(data_objects, sample='sample_name'):
         fig.delaxes(axes[j])
 
     plt.tight_layout()
-    plt.savefig(f'Figures_eps/TAIPAN/Raw_fits_{sample}.eps', format='eps',bbox_inches='tight')
-    plt.savefig(f'Figures_png/TAIPAN/Raw_fits_{sample}.png', format='png',bbox_inches='tight')
+    plt.savefig(f'Figures_eps/TAIPAN/Raw_fits_{sample}_{temperature}.eps', format='eps',bbox_inches='tight')
+    plt.savefig(f'Figures_png/TAIPAN/Raw_fits_{sample}_{temperature}.png', format='png',bbox_inches='tight')
     plt.show()
 
 
