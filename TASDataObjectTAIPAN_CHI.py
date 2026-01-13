@@ -511,6 +511,7 @@ def PlotGaussSigma(data_objects, x_attr='EN', title='Gauss sigma', plot=False):
     return sigmas, sigma_errs
 
 
+
 def PointAmpToArea(data_objects, avg_all_sigma, avg_all_sigma_err):
     """
     

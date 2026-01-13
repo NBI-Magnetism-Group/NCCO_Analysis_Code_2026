@@ -429,6 +429,106 @@ def plot_fit_parameters(data_objects, x_attr='EN', title=' '):
     plt.suptitle(title)
     plt.show()
 
+def plot_fit_sigmas(data_objects, x_attr='EN', title=' '):
+    """
+    Function to plot the fitting parameters and their errors of each data object as a function of an attribute.
+    
+    Parameters:
+        data_objects (list): List of data objects containing fit information.
+        x_attr (str): The attribute to plot on the x-axis ('EN' or 'TT').
+    """
+    # Lists to store the fitting parameters and their errors
+    As, A_errs = [], []
+    mus, mu_errs = [], []
+    sigmas, sigma_errs = [], []
+    Cs, C_errs = [], []
+    aas, a_errs = [], []
+
+    # X-axis values from the specified attribute
+    x_vals = [getattr(obj, x_attr) for obj in data_objects]
+
+    # Loop through each data object
+    for obj in data_objects:
+        # Extract the Minuit fit object and fit type
+        minuit = obj.best_fit_obj
+        fit_type = obj.fit_type  # Either 'gauss' or 'slope'
+
+        if fit_type == 'gauss':
+            # Get Gaussian fit parameters and errors from the Minuit object
+            A = minuit.values['A']
+            A_err = minuit.errors['A']
+            
+            mu = minuit.values['mu']
+            mu_err = minuit.errors['mu']
+            
+            sigma = minuit.values['sigma']
+            sigma_err = minuit.errors['sigma']
+            
+            C = minuit.values['C']
+            C_err = minuit.errors['C']
+            
+            a = minuit.values['a']  # No slope in Gaussian fit
+            a_err = minuit.errors['a']
+            # Append the parameters and errors to their respective lists
+            As.append(A)
+            A_errs.append(A_err)
+            
+            mus.append(mu)
+            mu_errs.append(mu_err)
+            
+            sigmas.append(sigma)
+            sigma_errs.append(sigma_err)
+            
+            Cs.append(C)
+            C_errs.append(C_err)
+            
+            aas.append(a)
+            a_errs.append(a_err)
+
+        elif fit_type == 'const':
+            # Set Gaussian parameters to 0 for linear fit
+            A, A_err = 0, 0
+            mu, mu_err = 0, 0
+            sigma, sigma_err = 0, 0
+            
+            # Get the constant and slope parameters and errors
+            C = minuit.values['C']
+            C_err = minuit.errors['C']
+            
+            a = minuit.values['a']  # No slope in Gaussian fit
+            a_err = minuit.errors['a']
+
+            # Append the parameters and errors to their respective lists
+            As.append(A)
+            A_errs.append(A_err)
+            
+            mus.append(mu)
+            mu_errs.append(mu_err)
+            
+            sigmas.append(sigma)
+            sigma_errs.append(sigma_err)
+            
+            Cs.append(C)
+            C_errs.append(C_err)
+            
+            aas.append(a)
+            a_errs.append(a_err)
+
+    # Now plot the parameters in subplots with error bars
+    fig, axs = plt.subplots(1, 1, figsize=(6, 4))
+    fig.subplots_adjust(hspace=0.3)
+
+    # Plot the Gaussian sigma with error bars
+    axs.errorbar(x_vals, sigmas, yerr=sigma_errs, fmt='o', linestyle='-', color='red', capsize=3)
+    axs.set_ylabel(r'Gaussian $\sigma$ [r.l.u.]')
+    if x_attr == 'EN':
+        axs.set_xlabel(r'$\Delta E$ [meV]')
+    elif x_attr == 'TT':
+        axs.set_xlabel('T [K]')
+
+    plt.suptitle(title)
+    plt.show()
+
 # Example of how you would call the function:
 # plot_fit_parameters_with_errors(list_of_data_objects, x_attr='EN')
 
