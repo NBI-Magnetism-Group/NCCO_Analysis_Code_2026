@@ -7,36 +7,46 @@ This repository contains the scripts, raw data, and figures used for the data an
 
 ## Repository Structure
 
-### **Data Folders**
-- **`Data_IN20/`**: Contains raw data files from the IN20 instrument at ILL.
-- **`Data_TAIPAN/`**: Contains raw data files from the TAIPAN instrument at ANSTO.
-- **`SQUID_Utrecht_data/`**: Contains raw SQUID data from measurements conducted at Utrecht University.
-- **`(NCCO Laue/)`**: Contains the x-ray Lau images taken at University of Copenhagenand is not provided as default. Can be provided upon reasonable request.
-- **`(Student_analysis/)`**: Contains the analysis of the neutron experiments made by the students and is not provided as default. Can be provided upon reasonable request. 
+The repository contains raw data organized by instrument and measurement type:
 
-### **Figure Folders**
-The repository includes generated figures in multiple formats, organized by instrument:
-- **`Figures_png/`**: Figures in PNG format.
-  - `SQUID/`: Figures from SQUID measurements.
-  - `IN20/`: Figures from IN20 experiments.
-  - `TAIPAN/`: Figures from TAIPAN experiments.
-- **`Figures_eps/`**: Figures in EPS format.
-  - `SQUID/`: Figures from SQUID measurements.
-  - `IN20/`: Figures from IN20 experiments.
-  - `TAIPAN/`: Figures from TAIPAN experiments.
-- **`Figures_svg/`**: Figures in SVG format.
-  - `SQUID/`: Figures from SQUID measurements.
-  - `IN20/`: Figures from IN20 experiments.
-  - `TAIPAN/`: Figures from TAIPAN experiments.
+- **`Data_IN20/`** – Raw IN20 neutron scattering experiment data from Institut Laue-Langevin (ILL).  
+- **`Data_TAIPAN/`** – Raw TAIPAN neutron scattering experiment data from ANSTO.  
+- **`SQUID_Utrecht_data/`** – SQUID magnetometry raw data from Utrecht University.  
+- **`(NCCO Laue/)`** – X-ray Laue images (not included by default; available upon request).  
+- **`(Student_analysis/)`** – Supplemental student analysis files (not included by default). :contentReference[oaicite:3]{index=3}
 
-### **Scripts**
-- **`DataAnalysis_IN20.ipynb`**: Jupyter Notebook for analyzing data from the IN20 experiment.
-- **`DataAnalysis_TAIPAN.ipynb`**: Jupyter Notebook for analyzing data from the TAIPAN experiment.
-- **`SQUID_analysis.ipynb`**: Jupyter Notebook for analyzing the SQUID measurement data.
-- **`TASDataObjectIN20.py`**: Contains a dataclass that aids in the IN20 analysis notebooks, with functions for data handling and processing.
-- **`TASDataObjectIN20SQ.py`**: Similar to `TASDataObjectIN20.py` but performs fitting and analysis in units of S(q,omega) instead of χ''.
-- **`TASDataObjectTAIPANSQ.py`**: Modified for TAIPAN data structure, providing fitting and analysis in units of S(q,omega).
-- **`NCCO_Env.yml`**: Anaconda environment file containing all dependencies for this project.
+---
+
+## Figures
+
+Figures generated from the analysis scripts are organized by output format and instrument:
+
+- **`Figures_png/`**
+  - `SQUID/`, `IN20/`, `TAIPAN/`
+- **`Figures_eps/`**
+  - `SQUID/`, `IN20/`, `TAIPAN/`
+- **`Figures_svg/`**
+  - `SQUID/`, `IN20/`, `TAIPAN/`  
+
+Each subfolder contains the corresponding plots used for visualizing data trends and results. :contentReference[oaicite:4]{index=4}
+
+---
+
+## Scripts
+
+Analysis code is provided primarily as **Jupyter Notebooks** and supporting Python modules:
+
+- **Jupyter Notebooks**
+  - `DataAnalysis_IN20.ipynb` – Analysis workflow for IN20 instrument data.  
+  - `DataAnalysis_TAIPAN.ipynb` – Analysis workflow for TAIPAN data.  
+  - `SQUID_analysis.ipynb` – Analysis workflow for SQUID magnetometer data.  
+- **Python Modules**
+  - `TASDataObjectIN20.py`  
+  - `TASDataObjectIN20SQ.py`  
+  - `TASDataObjectTAIPANSQ.py`  
+  - `TASDataObjectTAIPAN_CHI.py`  
+
+These modules define `TASDataObject` classes and helper functions used within notebooks for data handling, fitting, and plotting. :contentReference[oaicite:5]{index=5}
 
 ---
 
@@ -103,13 +113,14 @@ This repository contains the finalized code for a published scientific article. 
 ---
 
 ## License
-This project is licensed under the [MIT License](LICENSE). Feel free to use and adapt the materials as needed.
+This project is licensed under the [MIT License](LICENSE). Feel free to use the materials as needed.
 
 ---
 
 ## Acknowledgments
 This work incorporates data from the following sources:
-- IN20 instrument at Institut Laue-Langevin (ILL)
-- TAIPAN instrument at ANSTO
-- SQUID measurements from Utrecht University
+
+IN20 instrument at Institut Laue-Langevin (ILL): under proposal number TEST-3346 (doi:10.5291/ILL-DATA.TEST-3346)
+TAIPAN instrument at ANSTO under proposal P13914
+SQUID measurements from Utrecht University
 
