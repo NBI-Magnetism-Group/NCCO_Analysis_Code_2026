@@ -122,7 +122,7 @@ This project is licensed under the [MIT License](LICENSE). Feel free to use the 
 ## Acknowledgments
 This work incorporates data from the following sources:
 
-IN20 instrument at Institut Laue-Langevin (ILL): under proposal number TEST-3346 (doi:10.5291/ILL-DATA.TEST-3346)
-TAIPAN instrument at ANSTO under proposal P13914
-SQUID measurements from Utrecht University
+- IN20 instrument at Institut Laue-Langevin (ILL): under proposal number TEST-3346 (doi:10.5291/ILL-DATA.TEST-3346)\\
+- TAIPAN instrument at ANSTO under proposal P13914\\
+- SQUID measurements from Utrecht University\\
 
