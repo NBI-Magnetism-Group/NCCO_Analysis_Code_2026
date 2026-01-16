@@ -11,6 +11,8 @@ This repository contains the scripts, raw data, and figures used for the data an
 - **`Data_IN20/`**: Contains raw data files from the IN20 instrument at ILL.
 - **`Data_TAIPAN/`**: Contains raw data files from the TAIPAN instrument at ANSTO.
 - **`SQUID_Utrecht_data/`**: Contains raw SQUID data from measurements conducted at Utrecht University.
+- **`(NCCO Laue/)`**: Contains the x-ray Lau images taken at University of Copenhagenand is not provided as default. Can be provided upon reasonable request.
+- **`(Student_analysis/)`**: Contains the analysis of the neutron experiments made by the students and is not provided as default. Can be provided upon reasonable request. 
 
 ### **Figure Folders**
 The repository includes generated figures in multiple formats, organized by instrument:
@@ -64,7 +66,7 @@ The repository includes generated figures in multiple formats, organized by inst
 ---
 
 ## Dependencies
-The project relies on the following Python packages (managed via the Anaconda environment in `NCCO_Env.yml`):
+The project relies on the following Python packages (managed via the Anaconda environment in `NCCO_Env.yml` which can be provided upon request):
 - `numpy`
 - `matplotlib`
 - `pandas`
@@ -96,7 +98,7 @@ Matplotlib configurations included:
 ---
 
 ## Contributing
-This repository contains the finalized code for a published scientific article. Contributions are not required.
+This repository contains the finalized code for a published scientific article. In order to maintain documentation, contributions are not welcome.
 
 ---
 
