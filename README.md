@@ -55,7 +55,7 @@ These modules define `TASDataObject` classes and helper functions used within no
 ## How to Use
 1. Clone the repository:
    ```bash
-   git clone https://github.com/KristineKrighaar/NCCO_Article_Code
+   git clone https://github.com/NBI-Magnetism-Group/NCCO_Analysis_Code_2026
    ```
 2. Create the Anaconda environment:
    ```bash
