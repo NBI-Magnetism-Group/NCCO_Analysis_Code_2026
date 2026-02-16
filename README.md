@@ -1,5 +1,7 @@
 # Data Analysis for - Emergence of low-energy spin waves in superconducting electron-doped cuprates
 
+Author: Kristine M. L. Krighaar
+
 ## Overview
 This repository contains the scripts, raw data, and figures used for the data analysis presented in the scientific paper (arXiv:2509.1318). The datasets are derived from experiments conducted using the IN20 instrument at the Institut Laue-Langevin (ILL), the TAIPAN instrument at ANSTO, and the SQUID magnetometer measurements from Utrecht University. Raw files are not updated due to github space limitations.
 
