@@ -15,7 +15,7 @@ The repository contains raw data organized by instrument and measurement type:
 - **`Data_TAIPAN/`** – Raw TAIPAN neutron scattering experiment data from ANSTO.  
 - **`SQUID_Utrecht_data/`** – SQUID magnetometry raw data from Utrecht University.  
 - **`(NCCO Laue/)`** – X-ray Laue images (not included by default; available upon request).  
-- **`(Student_analysis/)`** – Supplemental student analysis files (not included by default). :contentReference[oaicite:3]{index=3}
+- **`(Student_analysis/)`** – Supplemental student analysis files (not included by default). 
 
 ---
 
@@ -30,7 +30,7 @@ Figures generated from the analysis scripts are organized by output format and i
 - **`Figures_svg/`**
   - `SQUID/`, `IN20/`, `TAIPAN/`  
 
-Each subfolder contains the corresponding plots used for visualizing data trends and results. :contentReference[oaicite:4]{index=4}
+Each subfolder contains the corresponding plots used for visualizing data trends and results. 
 
 ---
 
@@ -50,7 +50,7 @@ Analysis code is provided primarily as **Jupyter Notebooks** and supporting Pyth
   - `TASDataObjectTAIPANSQ.py`  
   - `TASDataObjectTAIPAN_CHI.py`  
 
-These modules define `TASDataObject` classes and helper functions used within notebooks for data handling, fitting, and plotting. :contentReference[oaicite:5]{index=5}
+These modules define `TASDataObject` classes and helper functions used within notebooks for data handling, fitting, and plotting. 
 
 ---
 
