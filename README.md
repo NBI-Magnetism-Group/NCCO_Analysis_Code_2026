@@ -1,5 +1,7 @@
 # Data Analysis for - Emergence of low-energy spin waves in superconducting electron-doped cuprates
 
+Author: Kristine M. L. Krighaar
+
 ## Overview
 This repository contains the scripts, raw data, and figures used for the data analysis presented in the scientific paper (arXiv:2509.1318). The datasets are derived from experiments conducted using the IN20 instrument at the Institut Laue-Langevin (ILL), the TAIPAN instrument at ANSTO, and the SQUID magnetometer measurements from Utrecht University. Raw files are not updated due to github space limitations.
 
@@ -13,7 +15,7 @@ The repository contains raw data organized by instrument and measurement type:
 - **`Data_TAIPAN/`** – Raw TAIPAN neutron scattering experiment data from ANSTO.  
 - **`SQUID_Utrecht_data/`** – SQUID magnetometry raw data from Utrecht University.  
 - **`(NCCO Laue/)`** – X-ray Laue images (not included by default; available upon request).  
-- **`(Student_analysis/)`** – Supplemental student analysis files (not included by default). :contentReference[oaicite:3]{index=3}
+- **`(Student_analysis/)`** – Supplemental student analysis files (not included by default). 
 
 ---
 
@@ -28,7 +30,7 @@ Figures generated from the analysis scripts are organized by output format and i
 - **`Figures_svg/`**
   - `SQUID/`, `IN20/`, `TAIPAN/`  
 
-Each subfolder contains the corresponding plots used for visualizing data trends and results. :contentReference[oaicite:4]{index=4}
+Each subfolder contains the corresponding plots used for visualizing data trends and results. 
 
 ---
 
@@ -48,7 +50,7 @@ Analysis code is provided primarily as **Jupyter Notebooks** and supporting Pyth
   - `TASDataObjectTAIPANSQ.py`  
   - `TASDataObjectTAIPAN_CHI.py`  
 
-These modules define `TASDataObject` classes and helper functions used within notebooks for data handling, fitting, and plotting. :contentReference[oaicite:5]{index=5}
+These modules define `TASDataObject` classes and helper functions used within notebooks for data handling, fitting, and plotting. 
 
 ---
 
