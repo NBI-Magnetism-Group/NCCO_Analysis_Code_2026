@@ -264,8 +264,8 @@ def plot_fits(data_objects, sample='sample_name', temperature = 'Nan'):
         fig.delaxes(axes[j])
 
     plt.tight_layout()
-    plt.savefig(f'Figures_eps/TAIPAN/Raw_fits_{sample}_{temperature}.eps', format='eps',bbox_inches='tight')
-    plt.savefig(f'Figures_png/TAIPAN/Raw_fits_{sample}_{temperature}.png', format='png',bbox_inches='tight')
+    #plt.savefig(f'Figures_eps/TAIPAN/Raw_fits_{sample}_{temperature}.eps', format='eps',bbox_inches='tight')
+    plt.savefig(f'Figures_png/TAIPAN/Raw_fits_{sample}_{temperature}.png', format='png',bbox_inches='tight', dpi= 500)
     plt.show()
 
 

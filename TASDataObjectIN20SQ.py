@@ -302,8 +302,8 @@ def plot_fits(data_objects, sample='sample_name'):
         fig.delaxes(axes[j])
 
     plt.tight_layout()
-    plt.savefig(f'Figures_eps/IN20/Raw_fits_{sample}.eps', format='eps',bbox_inches='tight')
-    plt.savefig(f'Figures_png/IN20/Raw_fits_{sample}.png', format='png',bbox_inches='tight')
+    #plt.savefig(f'Figures_eps/IN20/Raw_fits_{sample}.eps', format='eps',bbox_inches='tight')
+    plt.savefig(f'Figures_png/IN20/Raw_fits_{sample}.png', format='png',bbox_inches='tight', dpi=500)
     plt.show()
 
 

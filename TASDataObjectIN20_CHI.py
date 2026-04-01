@@ -270,7 +270,7 @@ def plot_fits(data_objects, sample='sample_name'):
         yerr = data_obj.Chi_err
 
         # Plot the data points with error bars
-        ax.errorbar(x, y, yerr=yerr, fmt='o')
+        ax.errorbar(x, y, yerr=yerr, fmt='o', color='#0072b2', ecolor='#3992b8')
 
         # Generate x-values for plotting the fit
         x_fit = np.linspace(min(x), max(x), 500)
@@ -281,14 +281,14 @@ def plot_fits(data_objects, sample='sample_name'):
             A, mu, sigma, a, C = data_obj.best_fit_obj.values
             y_fit = (A / (sigma * np.sqrt(2 * np.pi))) * np.exp(-((x_fit - mu)**2) / (2 * sigma**2)) + a*x_fit +C
             red_chi = data_obj.best_fit_obj.fval/(len(data_obj.QK)-5)
-            ax.plot(x_fit, y_fit, label=f'p(Wilks) = {data_obj.wilks:.3f}\n RedChi(gauss) = {data_obj.red_chi2_gauss:.3f}\n RedChi(slope) = {data_obj.red_chi2_const:.3f}', color='red')
+            ax.plot(x_fit, y_fit, label=f'p(Wilks) = {data_obj.wilks:.3f}\n RedChi(gauss) = {data_obj.red_chi2_gauss:.3f}\n RedChi(slope) = {data_obj.red_chi2_const:.3f}', color='#d55e00')
 
         elif data_obj.fit_type == "const":
             # Assuming best_fit_obj contains just the constant C
             a, C = data_obj.best_fit_obj.values
             y_fit = a*x_fit+C
             red_chi = data_obj.best_fit_obj.fval/(len(data_obj.QK)-2)
-            ax.plot(x_fit, y_fit, label=f'p(Wilks) = {data_obj.wilks:.3f}\n RedChi(gauss) = {data_obj.red_chi2_gauss:.3f}\n RedChi(slope) = {data_obj.red_chi2_const:.3f}', color='b')
+            ax.plot(x_fit, y_fit, label=f'p(Wilks) = {data_obj.wilks:.3f}\n RedChi(gauss) = {data_obj.red_chi2_gauss:.3f}\n RedChi(slope) = {data_obj.red_chi2_const:.3f}', color='#0072b2')
 
         # Add title and labels
         ax.set_title(f"{data_obj.EN:.1f} meV, {data_obj.TT:.1f} K: {data_obj.fit_type.capitalize()} Fit")
@@ -301,7 +301,7 @@ def plot_fits(data_objects, sample='sample_name'):
         fig.delaxes(axes[j])
 
     plt.tight_layout()
-    plt.savefig(f'Figures_png/IN20/Raw_fits_{sample}_CHI.png', format='png',bbox_inches='tight')
+    plt.savefig(f'Figures_png/IN20/Raw_fits_{sample}_CHI.png', format='png',bbox_inches='tight', dpi=500)
     plt.show()
 
 
